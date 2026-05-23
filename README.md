@@ -83,11 +83,6 @@ Open `http://localhost:3000` in your browser.
 └── video.mp4
 ```
 
-## Demo
-
-Watch the demo preview video:
-
-<video src="./video.mp4" autoplay loop muted playsinline width="100%" controls></video>
 
 ## Future Improvements
 
