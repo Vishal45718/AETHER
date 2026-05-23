@@ -1,26 +1,157 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-aether-void: #030303;
+  --color-aether-dark-1: #050505;
+  --color-aether-dark-2: #080808;
+  --color-aether-dark-3: #0D0D0D;
+  --color-aether-surface: #0A0A0A;
+  --color-aether-text-primary: #F5F1E8;
+  --color-aether-text-secondary: #A8A49C;
+  --color-aether-text-dim: #4A4844;
+  --color-aether-pearl: #DDD8CF;
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #050505;
+  --foreground: #F5F1E8;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  background-color: #050505;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* ─── Cinematic Noise Grain ─────────────────────────────── */
+@layer utilities {
+  .film-grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    animation: grainShift 0.4s steps(1) infinite;
+  }
+
+  /* Architectural dividers */
+  .line-divider {
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.07), transparent);
+  }
+
+  /* Restrained section label */
+  .chapter-label {
+    font-family: var(--font-jetbrains-mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(168,164,156,0.4);
+  }
+
+  /* Atmospheric ambient haze */
+  .ambient-haze {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+  }
+
+  /* Signal pulse for intelligence cues */
+  .signal-pulse {
+    animation: signalPulse 3s ease-in-out infinite;
+  }
+
+  /* Waveform bar */
+  .waveform-bar {
+    animation: waveformPulse var(--duration, 2s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+}
+
+/* ─── Keyframes ─────────────────────────────────────────── */
+@keyframes grainShift {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(-1%, -2%); }
+  20%  { transform: translate(2%, 1%); }
+  30%  { transform: translate(-2%, 3%); }
+  40%  { transform: translate(1%, -1%); }
+  50%  { transform: translate(-1%, 2%); }
+  60%  { transform: translate(2%, -2%); }
+  70%  { transform: translate(-2%, 1%); }
+  80%  { transform: translate(1%, 2%); }
+  90%  { transform: translate(-1%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes signalPulse {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(1.5); }
+}
+
+@keyframes waveformPulse {
+  0%, 100% { transform: scaleY(0.3); opacity: 0.3; }
+  50%       { transform: scaleY(1);   opacity: 0.7; }
+}
+
+@keyframes orbitSlow {
+  from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+
+@keyframes driftY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes hazeBreath {
+  0%, 100% { opacity: 0.06; transform: scale(1); }
+  50%       { opacity: 0.10; transform: scale(1.08); }
+}
+
+@keyframes sweepLine {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+/* ─── Cursor Crosshair ─────────────────────────────────── */
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(245, 241, 232, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease;
+  mix-blend-mode: difference;
+}
+
+::selection {
+  background-color: rgba(245, 241, 232, 0.12);
+  color: #F5F1E8;
+}
+
+/* ─── Scrollbar Styling ─────────────────────────────────── */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: rgba(245,241,232,0.1); }
